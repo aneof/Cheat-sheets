@@ -1,0 +1,58 @@
+# build step
+# for each build step, executes a docker run 
+steps:
+# which cloud builder will be used
+- name: 'gcr.io/cloud-builders/docker'
+  # pass argument to builder (invoke a command)
+  # exec format
+  args: ['build', '-t', 'gcr.io/ocm-ml-dashboard/my_image:$COMMIT_SHA', '.']
+  # KEY=VALUE environment variables
+  env: ["PORT=8080"]
+  # working directory for the specific step
+  dir: string
+  # unique identifier
+  id: "step_1"
+  # wait for specific steps (all if empty) before execution
+  waitFor: [string, string, ...]
+  # override builder entrypoint
+  entrypoint: 'python'
+  # args: ["--version"]
+  # encrypted env variables
+  # secretEnv: string
+  # docker volume (file persistence)
+  # volumes: object(Volume)
+  # time limit for step execution
+  timeout: 500s
+- name: string
+  # ...
+- name: string
+  # ...
+# entire build time limit
+timeout: string (Duration format)
+# amount of time a build can be queued
+queueTtl: string (Duration format)
+# storage bucket where logs will be written
+logsBucket: string
+# some options for all build steps
+options:
+ env: [string, string, ...]
+ # secretEnv: string
+ # volumes: object(Volume)
+ # sourceProvenanceHash: enum(HashType)
+ machineType: enum(MachineType)
+ diskSizeGb: string (int64 format)
+ substitutionOption: enum(SubstitutionOption)
+ # whether build logs are streamed instead of dumped after build
+ logStreamingOption: STREAM_ON
+ # Cloud Logging & Cloud Storage or Storage only (default: both)
+ logging: enum(LoggingMode)
+# change variable value that could be in an argument after build 
+# substitutions: map (key: string, value: string)
+tags: [string, string, ...]
+serviceAccount: string
+# secrets: object(Secret)
+availableSecrets: object(Secrets)
+# artifacts: object (Artifacts) to be stored in container registry
+# $COMMIT_SHA variable is needed for CI
+images:
+- "gcr.io/ocm-ml-dashboard/my_image:$COMMIT_SHA"
