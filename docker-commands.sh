@@ -1,8 +1,8 @@
 # build an image and give it a tag
 docker build -t imagename .
 
-# check status of currently running images
-docker ps 
+# check status of running and stopped images
+docker ps -a
 
 # list available docker images
 docker image ls 
